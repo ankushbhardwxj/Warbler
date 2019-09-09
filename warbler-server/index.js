@@ -7,7 +7,7 @@ const app = express();
 var bodyParser =  require('body-parser');
 var cors = require('cors');
 const errorHandler = require('./handlers/error');
-
+const db = require("./models");
 //declare a port to use
 const authRoutes = require("./routes/auth");
 const messagesRoutes = require("./routes/messages");
@@ -23,6 +23,7 @@ app.use(cors()); //to use cors
 // //whenever their is a request /api/auth then authRoutes is accessed
   app.use("/api/auth", authRoutes);
   app.use("/api/users/:id/messages", loginRequired, ensureCorrectUser, messagesRoutes);
+
   app.get("/api/messages", loginRequired, async function(req,res,next){
     try{
       //get the messages using find
@@ -34,7 +35,7 @@ app.use(cors()); //to use cors
           username: true,
           profileImageUrl: true
       });
-      return res.status(200).json(messgaes);
+      return res.status(200).json(messages);
     }catch(err){
       return next(err);
     }
